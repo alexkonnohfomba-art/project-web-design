@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketSL – Buy. Sell. Thrive.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet" />
+  <style>
+:root {
+  --orange: #e85d04;
+  --orange-light: #f48c06;
+  --orange-pale: #fff3e0;
+  --brown: #6b2d0f;
+  --cream: #fdf8f0;
+  --dark: #1a0a00;
+  --text: #2d1a08;
+  --text-light: #7a5c44;
+  --white: #ffffff;
+  --border: #e8d5c0;
+  --green: #2d6a4f;
+  --green-pale: #d8f3dc;
+  --shadow: 0 4px 24px rgba(232,93,4,0.10);
+  --shadow-lg: 0 16px 48px rgba(232,93,4,0.15);
+  --radius: 20px;
+  --radius-sm: 10px;
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Space Grotesk', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--text); background: var(--cream); overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+
+/* NAV */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: var(--cream);
+  border-bottom: 2px solid var(--border);
+  transition: box-shadow 0.3s;
+}
+.navbar.scrolled { box-shadow: var(--shadow); }
+.nav-inner {
+  max-width: 1240px; margin: 0 auto;
+  padding: 0 28px; height: 72px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.8rem; font-weight: 900;
+  color: var(--orange); letter-spacing: -1px;
+}
+.logo span { color: var(--brown); }
+.nav-links { display: flex; gap: 6px; align-items: center; }
+.nav-link {
+  font-size: 0.88rem; font-weight: 600;
+  padding: 8px 18px; border-radius: var(--radius-sm);
+  color: var(--text-light); transition: all 0.2s;
+}
+.nav-link:hover, .nav-link.active { background: var(--orange-pale); color: var(--orange); }
+.nav-sell {
+  background: var(--orange); color: white !important;
+  border-radius: 50px !important; font-weight: 700 !important;
+  box-shadow: 0 4px 12px rgba(232,93,4,0.3);
+}
+.nav-sell:hover { background: var(--brown) !important; }
+.hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+.hamburger span { display: block; width: 24px; height: 2px; background: var(--orange); border-radius: 2px; transition: all 0.3s; }
+
+/* BUTTONS */
+.btn {
+  display: inline-block; padding: 15px 32px; border-radius: 50px;
+  font-family: var(--font-body); font-size: 0.95rem; font-weight: 700;
+  cursor: pointer; border: none; transition: all 0.25s;
+}
+.btn-orange { background: var(--orange); color: white; box-shadow: 0 4px 16px rgba(232,93,4,0.35); }
+.btn-orange:hover { background: var(--brown); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,93,4,0.4); }
+.btn-cream { background: var(--cream); color: var(--orange); border: 2px solid var(--orange); }
+.btn-cream:hover { background: var(--orange-pale); transform: translateY(-2px); }
+.btn-dark { background: var(--dark); color: white; }
+.btn-dark:hover { background: var(--brown); transform: translateY(-2px); }
+.full-width { width: 100%; text-align: center; }
+
+/* TICKER */
+.ticker {
+  background: var(--orange); padding: 10px 0;
+  overflow: hidden; white-space: nowrap;
+  margin-top: 72px;
+}
+.ticker-inner {
+  display: inline-flex; gap: 48px;
+  animation: ticker 20s linear infinite;
+}
+.ticker-item { font-size: 0.82rem; font-weight: 700; color: white; letter-spacing: 0.5px; }
+.ticker-dot { color: rgba(255,255,255,0.5); }
+@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* HERO */
+.hero {
+  background: var(--cream);
+  padding: 80px 28px 80px;
+  position: relative; overflow: hidden;
+}
+.hero-pattern {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0.04;
+  background-image: radial-gradient(var(--orange) 1.5px, transparent 1.5px);
+  background-size: 32px 32px;
+}
+.hero-inner {
+  max-width: 1240px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+  align-items: center; position: relative; z-index: 1;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--orange);
+  margin-bottom: 20px;
+}
+.hero-eyebrow::before { content:''; display:block; width:24px; height:2px; background:var(--orange); }
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 5.5vw, 5rem);
+  font-weight: 900; line-height: 1.05;
+  color: var(--dark); margin-bottom: 24px;
+  letter-spacing: -1px;
+}
+.hero-title em { font-style: italic; color: var(--orange); }
+.hero-sub { font-size: 1.05rem; color: var(--text-light); line-height: 1.75; margin-bottom: 36px; max-width: 460px; }
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 52px; }
+.hero-trust { display: flex; align-items: center; gap: 16px; }
+.trust-avatars { display: flex; }
+.trust-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid var(--cream); margin-left: -10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; background: var(--orange-pale);
+}
+.trust-avatar:first-child { margin-left: 0; }
+.trust-text { font-size: 0.82rem; color: var(--text-light); font-weight: 600; }
+.trust-text strong { color: var(--text); }
+
+/* HERO VISUAL */
+.hero-visual { position: relative; }
+.market-board {
+  background: white; border-radius: var(--radius);
+  border: 2px solid var(--border);
+  overflow: hidden; box-shadow: var(--shadow-lg);
+}
+.board-header {
+  background: var(--dark); padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.board-title { color: white; font-weight: 700; font-size: 0.88rem; }
+.board-live { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: #4ade80; font-weight: 700; }
+.board-live::before { content:''; width:8px; height:8px; background:#4ade80; border-radius:50%; animation: blink 1s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.board-items { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.board-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-radius: var(--radius-sm);
+  background: var(--cream); border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+.board-item:hover { border-color: var(--orange); background: var(--orange-pale); }
+.bi-left { display: flex; align-items: center; gap: 12px; }
+.bi-icon { font-size: 1.4rem; }
+.bi-name { font-weight: 700; font-size: 0.88rem; color: var(--dark); }
+.bi-loc { font-size: 0.75rem; color: var(--text-light); }
+.bi-price { font-weight: 800; font-size: 0.95rem; color: var(--orange); }
+.board-footer {
+  border-top: 1px solid var(--border); padding: 12px 16px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.bf-text { font-size: 0.78rem; color: var(--text-light); font-weight: 600; }
+.float-badge {
+  position: absolute;
+  background: white; border-radius: 12px;
+  padding: 10px 16px; font-size: 0.8rem; font-weight: 700;
+  box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+  animation: floatBadge 3s ease-in-out infinite;
+}
+.fb1 { top: -16px; right: -16px; color: var(--green); animation-delay: 0s; }
+.fb2 { bottom: -16px; left: -16px; color: var(--orange); animation-delay: 1.5s; }
+@keyframes floatBadge { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+/* SECTIONS */
+.section { padding: 100px 28px; }
+.container { max-width: 1240px; margin: 0 auto; }
+.section-eyebrow {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--orange);
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.section-eyebrow::before { content:''; display:block; width:20px; height:2px; background:var(--orange); }
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900; color: var(--dark);
+  line-height: 1.15; letter-spacing: -0.5px; margin-bottom: 16px;
+}
+.section-sub { font-size: 1rem; color: var(--text-light); line-height: 1.75; max-width: 520px; }
+
+/* CATEGORIES */
+.categories { background: white; }
+.cats-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
+.cats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.cat-card {
+  border-radius: var(--radius); padding: 28px 20px;
+  text-align: center; cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.cat-card::after {
+  content: ''; position: absolute; inset: 0;
+  background: currentColor; opacity: 0; transition: opacity 0.3s;
+}
+.cat-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--orange); }
+.cat-c1 { background: #fff8f0; }
+.cat-c2 { background: #f0fdf4; }
+.cat-c3 { background: #fef9ee; }
+.cat-c4 { background: #fdf0f0; }
+.cat-c5 { background: #f0f4ff; }
+.cat-c6 { background: #fdf8f0; }
+.cat-c7 { background: #f0fdf9; }
+.cat-c8 { background: #fff0f8; }
+.cat-icon { font-size: 2.8rem; margin-bottom: 12px; display: block; }
+.cat-name { font-weight: 700; font-size: 0.9rem; color: var(--dark); margin-bottom: 4px; }
+.cat-count { font-size: 0.78rem; color: var(--text-light); font-weight: 600; }
+
+/* LISTINGS */
+.listings { background: var(--cream); }
+.listings-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+.filter-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.filter-btn {
+  padding: 8px 18px; border-radius: 50px;
+  border: 2px solid var(--border); background: white;
+  font-family: var(--font-body); font-size: 0.82rem; font-weight: 700;
+  cursor: pointer; color: var(--text-light); transition: all 0.2s;
+}
+.filter-btn.active, .filter-btn:hover { background: var(--orange); color: white; border-color: var(--orange); }
+.listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.listing-card {
+  background: white; border-radius: var(--radius);
+  border: 2px solid var(--border); overflow: hidden;
+  transition: all 0.3s; cursor: pointer;
+}
+.listing-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--orange); }
+.listing-card.hidden { display: none; }
+.lc-image {
+  height: 160px; background: var(--orange-pale);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 4rem; position: relative;
+}
+.lc-image.green { background: var(--green-pale); }
+.lc-image.brown { background: #f5ebe0; }
+.lc-badge {
+  position: absolute; top: 12px; left: 12px;
+  background: var(--orange); color: white;
+  font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 50px;
+}
+.lc-badge.fresh { background: var(--green); }
+.lc-badge.hot { background: var(--brown); }
+.lc-body { padding: 18px 20px; }
+.lc-category { font-size: 0.72rem; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.lc-name { font-weight: 700; font-size: 1rem; color: var(--dark); margin-bottom: 6px; }
+.lc-seller { font-size: 0.8rem; color: var(--text-light); margin-bottom: 12px; display: flex; align-items: center; gap: 4px; }
+.lc-footer { display: flex; justify-content: space-between; align-items: center; }
+.lc-price { font-family: var(--font-display); font-size: 1.2rem; font-weight: 900; color: var(--orange); }
+.lc-btn {
+  background: var(--orange-pale); color: var(--orange);
+  border: none; border-radius: 50px;
+  padding: 7px 16px; font-family: var(--font-body);
+  font-size: 0.78rem; font-weight: 700; cursor: pointer;
+  transition: all 0.2s;
+}
+.lc-btn:hover { background: var(--orange); color: white; }
+
+/* HOW IT WORKS */
+.how { background: var(--dark); padding: 100px 28px; }
+.how .section-eyebrow { color: var(--orange-light); }
+.how .section-eyebrow::before { background: var(--orange-light); }
+.how .section-title { color: white; }
+.steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; margin-top: 56px; position: relative; }
+.steps-grid::before {
+  content: ''; position: absolute;
+  top: 40px; left: calc(12.5% + 20px); right: calc(12.5% + 20px);
+  height: 2px; background: rgba(232,93,4,0.3);
+}
+.step { text-align: center; position: relative; }
+.step-num {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: var(--orange); color: white;
+  font-family: var(--font-display); font-size: 1.8rem; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px; position: relative; z-index: 1;
+  box-shadow: 0 0 0 8px rgba(232,93,4,0.15);
+}
+.step h3 { font-weight: 700; color: white; margin-bottom: 10px; font-size: 1rem; }
+.step p { font-size: 0.85rem; color: rgba(255,255,255,0.55); line-height: 1.7; }
+
+/* SELL SECTION */
+.sell { background: var(--orange); padding: 100px 28px; position: relative; overflow: hidden; }
+.sell::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.08) 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+}
+.sell-inner {
+  max-width: 1240px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+  align-items: center; position: relative; z-index: 1;
+}
+.sell-text h2 { font-family: var(--font-display); font-size: clamp(2rem,4vw,3.2rem); font-weight: 900; color: white; margin-bottom: 16px; line-height: 1.15; }
+.sell-text p { color: rgba(255,255,255,0.82); line-height: 1.75; margin-bottom: 32px; font-size: 1rem; }
+.sell-points { display: flex; flex-direction: column; gap: 14px; }
+.sell-point { display: flex; align-items: center; gap: 12px; color: white; font-weight: 600; font-size: 0.92rem; }
+.sp-check { width: 24px; height: 24px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.75rem; }
+
+/* REGISTER */
+.register { background: var(--cream); }
+.reg-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+.reg-info { padding-top: 8px; }
+.reg-info p { color: var(--text-light); line-height: 1.8; margin-bottom: 32px; }
+.reg-perks { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.perk {
+  background: white; border: 2px solid var(--border);
+  border-radius: var(--radius-sm); padding: 18px 16px;
+}
+.perk-icon { font-size: 1.6rem; margin-bottom: 8px; }
+.perk h4 { font-weight: 700; font-size: 0.88rem; color: var(--dark); margin-bottom: 4px; }
+.perk p { font-size: 0.78rem; color: var(--text-light); line-height: 1.5; }
+.reg-form {
+  background: white; border-radius: var(--radius);
+  border: 2px solid var(--border);
+  padding: 40px 36px; box-shadow: var(--shadow-lg);
+}
+.reg-form h3 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 900; color: var(--dark); margin-bottom: 6px; }
+.reg-form > p { font-size: 0.85rem; color: var(--text-light); margin-bottom: 28px; }
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-size: 0.82rem; font-weight: 700; color: var(--text); margin-bottom: 7px; letter-spacing: 0.3px; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%; padding: 13px 16px;
+  border: 2px solid var(--border); border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 0.9rem; color: var(--text);
+  background: var(--cream); outline: none; transition: border-color 0.2s;
+}
+.form-group input:focus,
+.form-group select:focus { border-color: var(--orange); background: white; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.error-msg { display: block; font-size: 0.75rem; color: #c0392b; margin-top: 4px; min-height: 16px; }
+.form-note { text-align: center; font-size: 0.82rem; color: var(--text-light); margin-top: 14px; }
+.form-note a { color: var(--orange); font-weight: 700; }
+
+/* CONTACT */
+.contact { background: white; }
+.contact-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; }
+.contact-left p { color: var(--text-light); line-height: 1.8; margin-bottom: 32px; }
+.cinfo-list { display: flex; flex-direction: column; gap: 16px; }
+.cinfo-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 16px 18px; border-radius: var(--radius-sm);
+  background: var(--cream); border: 2px solid var(--border);
+}
+.ci-ico { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+.ci-text strong { display: block; font-weight: 700; color: var(--dark); font-size: 0.88rem; margin-bottom: 2px; }
+.ci-text span { font-size: 0.82rem; color: var(--text-light); }
+.contact-form-box {
+  background: var(--cream); border-radius: var(--radius);
+  border: 2px solid var(--border); padding: 36px 32px;
+}
+.contact-form-box h3 { font-family: var(--font-display); font-size: 1.4rem; font-weight: 900; color: var(--dark); margin-bottom: 24px; }
+
+/* FOOTER */
+.footer { background: var(--dark); padding: 72px 28px 0; }
+.footer-inner { max-width: 1240px; margin: 0 auto; }
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.footer-brand .logo { margin-bottom: 14px; font-size: 1.6rem; }
+.footer-brand p { font-size: 0.85rem; color: rgba(255,255,255,0.5); line-height: 1.7; max-width: 240px; }
+.footer-col strong { display: block; color: white; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 18px; }
+.footer-col ul { display: flex; flex-direction: column; gap: 10px; }
+.footer-col a { font-size: 0.85rem; color: rgba(255,255,255,0.5); transition: color 0.2s; }
+.footer-col a:hover { color: var(--orange-light); }
+.footer-bottom { padding: 20px 0; text-align: center; font-size: 0.8rem; color: rgba(255,255,255,0.3); }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(26,10,0,0.7); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+.modal-overlay.active { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: var(--cream); border-radius: var(--radius);
+  border: 2px solid var(--border);
+  padding: 48px 40px; max-width: 420px; width: 90%;
+  text-align: center; transform: scale(0.92);
+  transition: transform 0.3s; box-shadow: var(--shadow-lg);
+}
+.modal-overlay.active .modal-box { transform: scale(1); }
+.modal-icon { font-size: 3rem; margin-bottom: 14px; }
+.modal-box h3 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 900; margin-bottom: 10px; color: var(--dark); }
+.modal-box p { color: var(--text-light); line-height: 1.6; margin-bottom: 28px; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .cats-grid { grid-template-columns: repeat(4,1fr); }
+  .listings-grid { grid-template-columns: repeat(2,1fr); }
+  .steps-grid { grid-template-columns: repeat(2,1fr); }
+  .steps-grid::before { display: none; }
+}
+@media (max-width: 768px) {
+  .nav-links {
+    position: fixed; top: 72px; left: 0; right: 0;
+    background: var(--cream); border-bottom: 2px solid var(--border);
+    flex-direction: column; padding: 16px; gap: 4px; display: none;
+  }
+  .nav-links.open { display: flex; }
+  .nav-link { text-align: center; padding: 12px; }
+  .hamburger { display: flex; }
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-visual { display: none; }
+  .cats-grid { grid-template-columns: repeat(2,1fr); }
+  .listings-grid { grid-template-columns: 1fr; }
+  .steps-grid { grid-template-columns: 1fr 1fr; }
+  .sell-inner { grid-template-columns: 1fr; }
+  .reg-layout { grid-template-columns: 1fr; }
+  .contact-layout { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .section { padding: 72px 20px; }
+  .hero { padding: 60px 20px 60px; }
+}
+@media (max-width: 480px) {
+  .cats-grid { grid-template-columns: repeat(2,1fr); }
+  .steps-grid { grid-template-columns: 1fr; }
+  .reg-perks { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; }
+  .reg-form { padding: 28px 20px; }
+}
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#home" class="logo">Market<span>SL</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#listings" class="nav-link">Listings</a></li>
+        <li><a href="#how" class="nav-link">How It Works</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+        <li><a href="#register" class="nav-link nav-sell">+ Sell Now</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-inner" id="tickerInner">
+      <span class="ticker-item">🛒 Fresh Cassava – Le 15/bag</span>
+      <span class="ticker-dot">•</span>
+      <span class="ticker-item">🐟 Dried Fish – Le 40/bundle</span>
+      <span class="ticker-dot">•</span>
+      <span class="ticker-item">🍅 Tomatoes – Le 8/tray</span>
+      <span class="ticker-dot">•</span>
+      <span class="ticker-item">🛵 Okada Transport – Freetown</span>
+      <span class="ticker-dot">•</span>
+      <span class="ticker-item">🌽 Ground Nut – Le 12/cup</span>
+      <span class="ticker-dot">•</span>
+      <span class="ticker-item">👗 Ankara Fabric – Le 55/yard</span>
+      <span class="ticker-dot">•</span>
+      <span class="ticker-item">🥥 Palm Oil – Le 25/gallon</span>
+      <span class="ticker-dot">•</span>
+      <span class="ticker-item">🐔 Live Chicken – Le 85</span>
+      <span class="ticker-dot">•</span>
+      <span class="ticker-item">🛒 Fresh Cassava – Le 15/bag</span>
+      <span class="ticker-dot">•</span>
+      <span class="ticker-item">🐟 Dried Fish – Le 40/bundle</span>
+      <span class="ticker-dot">•</span>
+      <span class="ticker-item">🍅 Tomatoes – Le 8/tray</span>
+      <span class="ticker-dot">•</span>
+      <span class="ticker-item">🛵 Okada Transport – Freetown</span>
+      <span class="ticker-dot">•</span>
+      <span class="ticker-item">🌽 Ground Nut – Le 12/cup</span>
+      <span class="ticker-dot">•</span>
+      <span class="ticker-item">👗 Ankara Fabric – Le 55/yard</span>
+      <span class="ticker-dot">•</span>
+      <span class="ticker-item">🥥 Palm Oil – Le 25/gallon</span>
+      <span class="ticker-dot">•</span>
+      <span class="ticker-item">🐔 Live Chicken – Le 85</span>
+      <span class="ticker-dot">•</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <div class="hero-pattern"></div>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-eyebrow">Sierra Leone's Digital Market</div>
+        <h1 class="hero-title">Buy. Sell.<br /><em>Thrive.</em></h1>
+        <p class="hero-sub">MarketSL connects buyers and sellers across Sierra Leone — from Freetown traders to upcountry farmers. List your goods, find the best prices, and grow your business online.</p>
+        <div class="hero-actions">
+          <a href="#listings" class="btn btn-orange">Browse Listings</a>
+          <a href="#register" class="btn btn-cream">Start Selling</a>
+        </div>
+        <div class="hero-trust">
+          <div class="trust-avatars">
+            <div class="trust-avatar">👩</div>
+            <div class="trust-avatar">👨</div>
+            <div class="trust-avatar">👩🏿</div>
+            <div class="trust-avatar">👨🏾</div>
+          </div>
+          <div class="trust-text"><strong>2,800+ sellers</strong> already on MarketSL</div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div style="position:relative;display:inline-block;">
+          <div class="market-board">
+            <div class="board-header">
+              <span class="board-title">📊 Live Market Prices</span>
+              <span class="board-live">LIVE</span>
+            </div>
+            <div class="board-items">
+              <div class="board-item"><div class="bi-left"><span class="bi-icon">🍅</span><div><div class="bi-name">Fresh Tomatoes</div><div class="bi-loc">📍 Freetown Central</div></div></div><span class="bi-price">Le 8</span></div>
+              <div class="board-item"><div class="bi-left"><span class="bi-icon">🐟</span><div><div class="bi-name">Dried Bonga Fish</div><div class="bi-loc">📍 Lumley Beach</div></div></div><span class="bi-price">Le 40</span></div>
+              <div class="board-item"><div class="bi-left"><span class="bi-icon">🥥</span><div><div class="bi-name">Red Palm Oil</div><div class="bi-loc">📍 Bo Market</div></div></div><span class="bi-price">Le 25</span></div>
+              <div class="board-item"><div class="bi-left"><span class="bi-icon">🌽</span><div><div class="bi-name">Ground Nut</div><div class="bi-loc">📍 Kenema</div></div></div><span class="bi-price">Le 12</span></div>
+            </div>
+            <div class="board-footer">
+              <span class="bf-text">📦 1,240 items listed today</span>
+              <span class="bf-text" style="color:var(--orange);font-weight:700;">View All →</span>
+            </div>
+          </div>
+          <div class="float-badge fb1">✅ Verified Seller</div>
+          <div class="float-badge fb2">🔥 240 sold today</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="categories section" id="about">
+    <div class="container">
+      <div class="cats-header">
+        <div>
+          <div class="section-eyebrow">Shop by Category</div>
+          <h2 class="section-title">What Are You Looking For?</h2>
+        </div>
+        <p class="section-sub" style="max-width:320px;margin-bottom:0;">Everything Sierra Leoneans buy and sell — all in one place.</p>
+      </div>
+      <div class="cats-grid">
+        <div class="cat-card cat-c1" onclick="showModal('🌾 Food & Produce','Browse fresh and dried food items from farmers and traders across Sierra Leone — rice, cassava, vegetables, fish, and more.')"><span class="cat-icon">🌾</span><div class="cat-name">Food & Produce</div><div class="cat-count">320 listings</div></div>
+        <div class="cat-card cat-c2" onclick="showModal('👗 Clothing & Fashion','Find Ankara fabrics, secondhand clothes, school uniforms, and locally made fashion from Sierra Leonean designers.')"><span class="cat-icon">👗</span><div class="cat-name">Clothing</div><div class="cat-count">180 listings</div></div>
+        <div class="cat-card cat-c3" onclick="showModal('📱 Electronics','Mobile phones, accessories, generators, solar panels, and home appliances from trusted sellers.')"><span class="cat-icon">📱</span><div class="cat-name">Electronics</div><div class="cat-count">95 listings</div></div>
+        <div class="cat-card cat-c4" onclick="showModal('🏠 Home & Living','Furniture, kitchen items, cleaning supplies, and home décor from local makers and importers.')"><span class="cat-icon">🏠</span><div class="cat-name">Home & Living</div><div class="cat-count">140 listings</div></div>
+        <div class="cat-card cat-c5" onclick="showModal('🚜 Farm Supplies','Seeds, fertilisers, tools, and farming equipment for Sierra Leone\'s agricultural communities.')"><span class="cat-icon">🚜</span><div class="cat-name">Farm Supplies</div><div class="cat-count">75 listings</div></div>
+        <div class="cat-card cat-c6" onclick="showModal('💼 Services','Transport, tailoring, repairs, catering, and other services offered by local Sierra Leonean professionals.')"><span class="cat-icon">💼</span><div class="cat-name">Services</div><div class="cat-count">210 listings</div></div>
+        <div class="cat-card cat-c7" onclick="showModal('💊 Health & Beauty','Herbal medicines, beauty products, soaps, and personal care from local and imported brands.')"><span class="cat-icon">💊</span><div class="cat-name">Health & Beauty</div><div class="cat-count">88 listings</div></div>
+        <div class="cat-card cat-c8" onclick="showModal('🎓 Education','Textbooks, stationery, uniforms, and tutoring services for students across Sierra Leone.')"><span class="cat-icon">🎓</span><div class="cat-name">Education</div><div class="cat-count">55 listings</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LISTINGS -->
+  <section class="listings section" id="listings">
+    <div class="container">
+      <div class="listings-header">
+        <div>
+          <div class="section-eyebrow">Fresh Listings</div>
+          <h2 class="section-title">Today's Market</h2>
+        </div>
+        <div class="filter-row">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="food">Food</button>
+          <button class="filter-btn" data-filter="fashion">Fashion</button>
+          <button class="filter-btn" data-filter="services">Services</button>
+        </div>
+      </div>
+      <div class="listings-grid" id="listingsGrid">
+        <div class="listing-card" data-cat="food">
+          <div class="lc-image green"><span>🍅</span><span class="lc-badge fresh">Fresh</span></div>
+          <div class="lc-body">
+            <div class="lc-category">Food & Produce</div>
+            <div class="lc-name">Fresh Tomatoes – 1 Tray</div>
+            <div class="lc-seller">🏪 Mariama's Market Stall · Freetown</div>
+            <div class="lc-footer"><span class="lc-price">Le 8</span><button class="lc-btn" onclick="showModal('🍅 Fresh Tomatoes','Seller: Mariama\'s Market Stall\nLocation: Freetown Central Market\nPrice: Le 8 per tray\n\nContact seller to arrange pickup or delivery.')">Contact Seller</button></div>
+          </div>
+        </div>
+        <div class="listing-card" data-cat="food">
+          <div class="lc-image"><span>🐟</span><span class="lc-badge hot">Popular</span></div>
+          <div class="lc-body">
+            <div class="lc-category">Food & Produce</div>
+            <div class="lc-name">Dried Bonga Fish – 1 Bundle</div>
+            <div class="lc-seller">🏪 Koroma Fisheries · Lumley</div>
+            <div class="lc-footer"><span class="lc-price">Le 40</span><button class="lc-btn" onclick="showModal('🐟 Dried Bonga Fish','Seller: Koroma Fisheries\nLocation: Lumley Beach, Freetown\nPrice: Le 40 per bundle\n\nBulk orders available. Contact seller directly.')">Contact Seller</button></div>
+          </div>
+        </div>
+        <div class="listing-card" data-cat="fashion">
+          <div class="lc-image brown"><span>👗</span><span class="lc-badge">New</span></div>
+          <div class="lc-body">
+            <div class="lc-category">Clothing & Fashion</div>
+            <div class="lc-name">Ankara Fabric – 6 Yards</div>
+            <div class="lc-seller">🏪 Aminata Fabrics · Bo</div>
+            <div class="lc-footer"><span class="lc-price">Le 55</span><button class="lc-btn" onclick="showModal('👗 Ankara Fabric','Seller: Aminata Fabrics\nLocation: Bo Market, Southern Province\nPrice: Le 55 for 6 yards\n\nMultiple patterns available. Ships nationwide.')">Contact Seller</button></div>
+          </div>
+        </div>
+        <div class="listing-card" data-cat="food">
+          <div class="lc-image green"><span>🥥</span><span class="lc-badge fresh">Fresh</span></div>
+          <div class="lc-body">
+            <div class="lc-category">Food & Produce</div>
+            <div class="lc-name">Red Palm Oil – 1 Gallon</div>
+            <div class="lc-seller">🏪 Sorie's Farm · Kenema</div>
+            <div class="lc-footer"><span class="lc-price">Le 25</span><button class="lc-btn" onclick="showModal('🥥 Red Palm Oil','Seller: Sorie\'s Farm\nLocation: Kenema, Eastern Province\nPrice: Le 25 per gallon\n\nPure, unrefined palm oil. Bulk discounts available.')">Contact Seller</button></div>
+          </div>
+        </div>
+        <div class="listing-card" data-cat="services">
+          <div class="lc-image"><span>🛵</span><span class="lc-badge hot">In Demand</span></div>
+          <div class="lc-body">
+            <div class="lc-category">Services</div>
+            <div class="lc-name">Okada Delivery Service</div>
+            <div class="lc-seller">🏪 Bangura Express · Freetown</div>
+            <div class="lc-footer"><span class="lc-price">Le 5+</span><button class="lc-btn" onclick="showModal('🛵 Okada Delivery','Seller: Bangura Express\nLocation: Freetown (all areas)\nStarting Price: Le 5\n\nSame-day delivery across Freetown. Call to book.')">Contact Seller</button></div>
+          </div>
+        </div>
+        <div class="listing-card" data-cat="fashion">
+          <div class="lc-image brown"><span>👠</span><span class="lc-badge">New</span></div>
+          <div class="lc-body">
+            <div class="lc-category">Clothing & Fashion</div>
+            <div class="lc-name">Handmade Leather Sandals</div>
+            <div class="lc-seller">🏪 Kamara Crafts · Makeni</div>
+            <div class="lc-footer"><span class="lc-price">Le 35</span><button class="lc-btn" onclick="showModal('👠 Leather Sandals','Seller: Kamara Crafts\nLocation: Makeni, Northern Province\nPrice: Le 35 per pair\n\nHandcrafted leather sandals. All sizes available.')">Contact Seller</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how section" id="how">
+    <div class="container">
+      <div style="text-align:center;max-width:560px;margin:0 auto;">
+        <div class="section-eyebrow">Simple Process</div>
+        <h2 class="section-title">How MarketSL Works</h2>
+      </div>
+      <div class="steps-grid">
+        <div class="step"><div class="step-num">1</div><h3>Create Account</h3><p>Sign up for free in under 2 minutes. All you need is a name, email, and phone number.</p></div>
+        <div class="step"><div class="step-num">2</div><h3>List Your Product</h3><p>Add your item with a description, price, and location. No technical knowledge needed.</p></div>
+        <div class="step"><div class="step-num">3</div><h3>Buyers Contact You</h3><p>Interested buyers reach out directly. You negotiate and agree on a price together.</p></div>
+        <div class="step"><div class="step-num">4</div><h3>Complete the Deal</h3><p>Meet safely or arrange delivery. Get paid and grow your business across Sierra Leone.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SELL BANNER -->
+  <section class="sell">
+    <div class="sell-inner">
+      <div class="sell-text">
+        <h2>Ready to Start Selling?</h2>
+        <p>Join over 2,800 sellers already growing their businesses on MarketSL. Whether you're a market trader, farmer, or small business owner — we've got a spot for you.</p>
+        <div class="sell-points">
+          <div class="sell-point"><div class="sp-check">✓</div>Free to list your products</div>
+          <div class="sell-point"><div class="sp-check">✓</div>Reach buyers nationwide</div>
+          <div class="sell-point"><div class="sp-check">✓</div>No commission on sales</div>
+          <div class="sell-point"><div class="sp-check">✓</div>Works on any mobile phone</div>
+        </div>
+      </div>
+      <div>
+        <a href="#register" class="btn btn-dark" style="font-size:1.1rem;padding:18px 40px;">Create Free Seller Account →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGISTER -->
+  <section class="register section" id="register">
+    <div class="container">
+      <div class="reg-layout">
+        <div class="reg-info">
+          <div class="section-eyebrow">Join MarketSL</div>
+          <h2 class="section-title">Create Your Free Account</h2>
+          <p>Whether you want to buy, sell, or both — register for free and start trading today.</p>
+          <div class="reg-perks">
+            <div class="perk"><div class="perk-icon">🛒</div><h4>Buy Anything</h4><p>Access thousands of listings from sellers across Sierra Leone.</p></div>
+            <div class="perk"><div class="perk-icon">💰</div><h4>Sell for Free</h4><p>List unlimited products with no listing fees or commissions.</p></div>
+            <div class="perk"><div class="perk-icon">🔔</div><h4>Price Alerts</h4><p>Get notified when items you want drop in price.</p></div>
+            <div class="perk"><div class="perk-icon">⭐</div><h4>Trusted Ratings</h4><p>Build your reputation with buyer reviews and ratings.</p></div>
+          </div>
+        </div>
+        <div class="reg-form">
+          <h3>Sign Up Free</h3>
+          <p>Start buying and selling in minutes.</p>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fname">First Name</label>
+              <input type="text" id="fname" placeholder="First name" />
+              <span class="error-msg" id="fnameError"></span>
+            </div>
+            <div class="form-group">
+              <label for="lname">Last Name</label>
+              <input type="text" id="lname" placeholder="Last name" />
+              <span class="error-msg" id="lnameError"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="your@email.com" />
+            <span class="error-msg" id="emailError"></span>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="+232 76 000 000" />
+            <span class="error-msg" id="phoneError"></span>
+          </div>
+          <div class="form-group">
+            <label for="role">I want to</label>
+            <select id="role">
+              <option value="">Select account type</option>
+              <option value="buyer">Buy products</option>
+              <option value="seller">Sell products</option>
+              <option value="both">Buy and Sell</option>
+            </select>
+            <span class="error-msg" id="roleError"></span>
+          </div>
+          <div class="form-group">
+            <label for="location">Your District</label>
+            <select id="location">
+              <option value="">Select your district</option>
+              <option>Freetown (Western Area)</option>
+              <option>Bo</option><option>Kenema</option>
+              <option>Makeni</option><option>Kono</option>
+              <option>Port Loko</option><option>Tonkolili</option>
+              <option>Kambia</option><option>Kailahun</option>
+              <option>Moyamba</option><option>Bonthe</option>
+              <option>Pujehun</option>
+            </select>
+            <span class="error-msg" id="locationError"></span>
+          </div>
+          <button class="btn btn-orange full-width" onclick="handleRegister()">Create Free Account →</button>
+          <p class="form-note">Already have an account? <a href="#" onclick="showModal('🔐 Login','Login feature coming soon. Thank you!')">Log in</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact section" id="contact">
+    <div class="container">
+      <div class="contact-layout">
+        <div class="contact-left">
+          <div class="section-eyebrow">Get In Touch</div>
+          <h2 class="section-title">Contact MarketSL</h2>
+          <p>Have a question, want to report a listing, or need help with your account? We're here to help Sierra Leonean traders succeed.</p>
+          <div class="cinfo-list">
+            <div class="cinfo-item"><span class="ci-ico">📍</span><div class="ci-text"><strong>Office</strong><span>Freetown, Western Area, Sierra Leone</span></div></div>
+            <div class="cinfo-item"><span class="ci-ico">📧</span><div class="ci-text"><strong>Email</strong><span>hello@marketsl.org</span></div></div>
+            <div class="cinfo-item"><span class="ci-ico">📞</span><div class="ci-text"><strong>Phone</strong><span>+232 76 111 222</span></div></div>
+            <div class="cinfo-item"><span class="ci-ico">⏰</span><div class="ci-text"><strong>Hours</strong><span>Monday – Saturday, 7am – 7pm</span></div></div>
+          </div>
+        </div>
+        <div class="contact-form-box">
+          <h3>Send a Message</h3>
+          <div class="form-group"><label for="cname">Full Name</label><input type="text" id="cname" placeholder="Your name" /></div>
+          <div class="form-group"><label for="cemail">Email</label><input type="email" id="cemail" placeholder="your@email.com" /></div>
+          <div class="form-group">
+            <label for="csubject">Reason for Contact</label>
+            <select id="csubject">
+              <option value="">Select a reason</option>
+              <option>Report a listing</option>
+              <option>Account help</option>
+              <option>Partnership enquiry</option>
+              <option>General question</option>
+            </select>
+          </div>
+          <div class="form-group"><label for="cmsg">Message</label><textarea id="cmsg" rows="4" placeholder="How can we help you?"></textarea></div>
+          <button class="btn btn-orange full-width" onclick="handleContact()">Send Message →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="logo">Market<span style="color:rgba(255,255,255,0.4)">SL</span></div>
+          <p>Sierra Leone's free digital marketplace — connecting buyers and sellers from Freetown to every district.</p>
+        </div>
+        <div class="footer-col">
+          <strong>Navigate</strong>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">Categories</a></li>
+            <li><a href="#listings">Listings</a></li>
+            <li><a href="#how">How It Works</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <strong>Categories</strong>
+          <ul>
+            <li><a href="#">Food & Produce</a></li>
+            <li><a href="#">Clothing</a></li>
+            <li><a href="#">Electronics</a></li>
+            <li><a href="#">Farm Supplies</a></li>
+            <li><a href="#">Services</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <strong>Support</strong>
+          <ul>
+            <li><a href="#">Help Centre</a></li>
+            <li><a href="#">Safety Tips</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Use</a></li>
+            <li><a href="#">Report Issue</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">© 2026 MarketSL. Free for all Sierra Leoneans. 🇸🇱</div>
+    </div>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+      <div class="modal-icon" id="modalIcon">🎉</div>
+      <h3 id="modalTitle">Success!</h3>
+      <p id="modalMsg"></p>
+      <button class="btn btn-orange" onclick="closeModal()">Got It</button>
+    </div>
+  </div>
+
+  <script>
+// NAV SCROLL
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 40));
+
+// HAMBURGER
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+hamburger.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+  const spans = hamburger.querySelectorAll('span');
+  const open = navLinks.classList.contains('open');
+  spans[0].style.transform = open ? 'rotate(45deg) translate(5px,5px)' : '';
+  spans[1].style.opacity = open ? '0' : '';
+  spans[2].style.transform = open ? 'rotate(-45deg) translate(5px,-5px)' : '';
+});
+document.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', () => {
+  navLinks.classList.remove('open');
+  hamburger.querySelectorAll('span').forEach(s => { s.style.transform=''; s.style.opacity=''; });
+}));
+
+// ACTIVE NAV
+const sections = document.querySelectorAll('section[id]');
+const navItems = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+  navItems.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+});
+
+// LISTING FILTER
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.listing-card').forEach(c => {
+      c.classList.toggle('hidden', f !== 'all' && c.dataset.cat !== f);
+    });
+  });
+});
+
+// MODAL
+function showModal(title, msg) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalMsg').textContent = msg;
+  document.getElementById('modalOverlay').classList.add('active');
+}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+// REGISTER
+function handleRegister() {
+  const fname = document.getElementById('fname').value.trim();
+  const lname = document.getElementById('lname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const role = document.getElementById('role').value;
+  const location = document.getElementById('location').value;
+  ['fnameError','lnameError','emailError','phoneError','roleError','locationError'].forEach(id => document.getElementById(id).textContent = '');
+  let valid = true;
+  if (fname.length < 2) { document.getElementById('fnameError').textContent = 'Enter your first name.'; valid = false; }
+  if (lname.length < 2) { document.getElementById('lnameError').textContent = 'Enter your last name.'; valid = false; }
+  if (!email.includes('@') || !email.includes('.')) { document.getElementById('emailError').textContent = 'Enter a valid email address.'; valid = false; }
+  if (phone.length < 8) { document.getElementById('phoneError').textContent = 'Enter a valid phone number.'; valid = false; }
+  if (!role) { document.getElementById('roleError').textContent = 'Please select account type.'; valid = false; }
+  if (!location) { document.getElementById('locationError').textContent = 'Please select your district.'; valid = false; }
+  if (valid) {
+    showModal('🎉 Welcome to MarketSL!', `Hi ${fname}! Your account is ready. You can now browse listings, contact sellers, and start trading across Sierra Leone.`);
+    ['fname','lname','email','phone','role','location'].forEach(id => document.getElementById(id).value = '');
+  }
+}
+
+// CONTACT
+function handleContact() {
+  const name = document.getElementById('cname').value.trim();
+  const email = document.getElementById('cemail').value.trim();
+  const msg = document.getElementById('cmsg').value.trim();
+  if (!name || !email || !msg) { showModal('⚠️ Incomplete', 'Please fill in all fields before sending.'); return; }
+  showModal('✅ Message Sent!', 'Thank you for contacting MarketSL. We will get back to you shortly.');
+  ['cname','cemail','csubject','cmsg'].forEach(id => document.getElementById(id).value = '');
+}
+
+// FADE IN
+const fObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; fObs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.cat-card,.listing-card,.step,.perk,.cinfo-item').forEach((el,i) => {
+  el.style.cssText += `opacity:0;transform:translateY(24px);transition:opacity 0.5s ease ${i*0.06}s,transform 0.5s ease ${i*0.06}s`;
+  fObs.observe(el);
+});
+  </script>
+</body>
+</html>
